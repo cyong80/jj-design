@@ -8,7 +8,26 @@ const meta = {
     layout: "centered",
   },
   tags: ["autodocs"],
-  argTypes: {},
+  argTypes: {
+    shape: {
+      control: "select",
+      description: "Select의 모양",
+      table: {
+        type: { summary: "rounded | square | circle" },
+        defaultValue: { summary: "rounded" },
+      },
+      options: ["rounded", "square", "circle"],
+    },
+    size: {
+      control: "select",
+      description: "Select의 크기",
+      table: {
+        type: { summary: "sm | md | lg" },
+        defaultValue: { summary: "md" },
+      },
+      options: ["sm", "md", "lg"],
+    },
+  },
   args: {},
 } satisfies Meta<typeof Select>;
 

@@ -1,9 +1,10 @@
+import { ShapeVariants, SizeVariants } from "@/types";
 import { cn } from "@/utils";
-import { cva, VariantProps } from "class-variance-authority";
 import { Slot } from "@radix-ui/react-slot";
+import { cva, VariantProps } from "class-variance-authority";
 import { forwardRef } from "react";
 
-export const buttonVariants = cva(
+const buttonVariants = cva(
   "inline-flex items-center justify-center disabled:cursor-not-allowed disabled:opacity-50",
   {
     variants: {
@@ -13,16 +14,8 @@ export const buttonVariants = cva(
         ghost: "disabled:text-default-400",
         link: "hover:not-disabled:underline decoration-2 underline-offset-2",
       },
-      shape: {
-        rounded: "rounded-md",
-        square: "rounded-none",
-        circle: "rounded-full",
-      },
-      size: {
-        sm: "text-sm px-4 py-2",
-        md: "text-base px-6 py-3",
-        lg: "text-lg px-8 py-4",
-      },
+      shape: ShapeVariants,
+      size: SizeVariants,
       color: {
         default: "",
         danger: "",
