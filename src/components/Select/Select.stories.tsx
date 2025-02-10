@@ -1,5 +1,7 @@
 import { Meta, StoryObj } from "@storybook/react";
+import { fn } from "@storybook/test";
 import { Select } from "./Select";
+import { IceCream } from "lucide-react";
 
 const meta = {
   title: "Components/Select",
@@ -28,7 +30,22 @@ const meta = {
       options: ["sm", "md", "lg"],
     },
   },
-  args: {},
+  args: {
+    onChange: fn(),
+    options: [
+      {
+        label: (
+          <div className="flex items-center gap-2">
+            <IceCream />
+            Apple
+          </div>
+        ),
+        value: "apple",
+      },
+      { label: <div>Banana</div>, value: "banana" },
+      { label: <div>Cherry</div>, value: "cherry" },
+    ],
+  },
 } satisfies Meta<typeof Select>;
 
 export default meta;
