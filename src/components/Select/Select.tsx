@@ -13,15 +13,16 @@ import {
   useDismiss,
   useFloating,
   useInteractions,
-  useListItem,
   useListNavigation,
+  useMergeRefs,
   useRole,
   useTypeahead,
 } from "@floating-ui/react";
 import { cva, VariantProps } from "class-variance-authority";
-import { Check, ChevronDown } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { forwardRef, ReactNode, useCallback, useRef, useState } from "react";
-import { SelectProvider, useSelectContext } from "./Select.context";
+import { SelectProvider } from "./Select.context";
+import { SelectItem } from "./SelectItem";
 
 const selectVariants = cva(
   "inline-flex items-center justify-between min-w-[180px] outline-none border border-default-200 focus:border-default-900 text-default-900",
@@ -143,6 +144,8 @@ export const Select = forwardRef<HTMLDivElement, ISelectProps>(
     const { getReferenceProps, getFloatingProps, getItemProps } =
       useInteractions([listNav, typeahead, click, dismiss, role]);
 
+    const mergeRef = useMergeRefs([refs.setReference, ref]);
+
     return (
       <SelectProvider
         open={open}
@@ -158,14 +161,7 @@ export const Select = forwardRef<HTMLDivElement, ISelectProps>(
         <div
           tabIndex={0}
           className={cn(selectVariants({ shape, size: sizeProp }))}
-          ref={(el) => {
-            refs.setReference(el);
-            if (typeof ref === "function") {
-              return ref(el);
-            } else if (ref !== null && ref !== undefined) {
-              ref.current = el;
-            }
-          }}
+          ref={mergeRef}
           {...getReferenceProps()}
         >
           <span>
@@ -201,53 +197,3 @@ export const Select = forwardRef<HTMLDivElement, ISelectProps>(
 );
 
 Select.displayName = "Select";
-
-export const SelectItem = ({
-  value,
-  children,
-}: {
-  value: string;
-  children: ReactNode;
-}) => {
-  const { activeIndex, selectedIndex, getItemProps, handleSelect, isTyping } =
-    useSelectContext();
-
-  const { ref, index } = useListItem({ label: value });
-
-  const isActive = activeIndex === index;
-  const isSelected = selectedIndex === index;
-
-  return (
-    <div
-      ref={ref}
-      role="option"
-      aria-selected={isActive && isSelected}
-      tabIndex={isActive ? 0 : -1}
-      className={cn(
-        "flex items-center text-sm px-2 py-1 rounded-sm cursor-default outline-none",
-        {
-          "bg-default-100": isActive,
-        }
-      )}
-      {...getItemProps({
-        onClick: () => handleSelect(index),
-        onKeyDown: (e) => {
-          if (e.key === "Enter") {
-            e.preventDefault();
-            handleSelect(index);
-          }
-
-          if (e.key === " " && !isTyping) {
-            e.preventDefault();
-            handleSelect(index);
-          }
-        },
-      })}
-    >
-      <div className="flex items-center justify-center w-6">
-        {isSelected && <Check className="size-[1em]" />}
-      </div>
-      {children}
-    </div>
-  );
-};

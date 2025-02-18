@@ -34,12 +34,7 @@ const meta = {
     onChange: fn(),
     options: [
       {
-        label: (
-          <div className="flex items-center gap-2">
-            <IceCream />
-            Apple
-          </div>
-        ),
+        label: <div>Apple</div>,
         value: "apple",
       },
       { label: <div>Banana</div>, value: "banana" },
